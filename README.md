@@ -1,2 +1,1 @@
-# U_Theater
-Theater - spring application
+# Theater - spring application
