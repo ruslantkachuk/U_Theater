@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+ 	   http://www.springframework.org/schema/context/spring-context.xsd
+ 	   http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:annotation-config/>
+
+    <import resource="spring-aspect.xml"/>
+    <import resource="spring-data.xml"/>
+    <import resource="spring-discount.xml"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:price.properties</value>
+                <value>classpath:auditorium.properties</value>
+                <value>classpath:db.properties</value>
+                <value>classpath:sql-request.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <bean id="auditoriumService" class="com.epam.university.service.impl.AuditoriumServiceImpl"/>
+    <bean id="bookingService" class="com.epam.university.service.impl.BookingServiceImpl"/>
+    <bean id="eventService" class="com.epam.university.service.impl.EventServiceImpl"/>
+    <bean id="userService" class="com.epam.university.service.impl.UserServiceImpl"/>
+
+    <bean id="counterDao" class="com.epam.university.dao.impl.CounterDaoImpl"/>
+    <bean id="ticketDao" class="com.epam.university.dao.impl.TicketDaoImpl"/>
+    <bean id="userDao" class="com.epam.university.dao.impl.UserDaoImpl"/>
+    <bean id="eventDao" class="com.epam.university.dao.impl.EventDaoImpl"/>
+    <bean id="auditoriumDao" class="com.epam.university.dao.impl.AuditoriumDaoImpl"/>
+
+    <util:list id="listCountersRepository" value-type="com.epam.university.entity.Counter"/>
+    <util:list id="listTicketsRepository" value-type="com.epam.university.entity.Ticket"/>
+    <util:list id="listUsersRepository" value-type="com.epam.university.entity.User"/>
+    <util:list id="listEventsRepository" value-type="com.epam.university.entity.Event"/>
+    <util:list id="listAuditoriumsRepository" value-type="com.epam.university.entity.Auditorium">
+        <ref bean="auditoriumSmall"/>
+        <ref bean="auditoriumBig"/>
+    </util:list>
+
+    <bean id="auditoriumSmall" class="com.epam.university.entity.Auditorium">
+        <property name="auditoriumId" value="${auditoriumSmall.name}"/>
+        <property name="name" value="${auditoriumSmall.name}"/>
+        <property name="seats" value="${auditoriumSmall.seats}"/>
+        <property name="vipSeats" value="#{T(java.util.Arrays).asList('${auditoriumSmall.vipSeats}')}"/>
+    </bean>
+    <bean id="auditoriumBig" class="com.epam.university.entity.Auditorium">
+        <property name="auditoriumId" value="${auditoriumBig.name}"/>
+        <property name="name" value="${auditoriumBig.name}"/>
+        <property name="seats" value="${auditoriumBig.seats}"/>
+        <property name="vipSeats" value="#{T(java.util.Arrays).asList('${auditoriumBig.vipSeats}')}"/>
+    </bean>
+
+</beans>
